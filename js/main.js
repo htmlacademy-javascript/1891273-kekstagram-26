@@ -1,4 +1,4 @@
-const getRandomInt = function (min, max) {
+const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   if (min > max) {
@@ -11,12 +11,6 @@ const getRandomInt = function (min, max) {
 
 getRandomInt(1, 10);
 
-const checkLengthString = function (string, stringMax) {
-  const lengthString = string.length;
-  if (lengthString > stringMax) {
-    return false;
-  }
-  return true;
-};
+const checkStringLength = (string, maxLength) => string.length <= maxLength;
 
-checkLengthString('Комментарий', 140);
+checkStringLength('Комментарий', 140);
