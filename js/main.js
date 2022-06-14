@@ -1,32 +1,8 @@
-const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+const NUMBERS_ID_COMMENTS = Array.from({ length: 100 }, (v, i) =>  i + 1);
 
-const ADRESS = [
-  'photos/1.jpg',
-  'photos/2.jpg',
-  'photos/3.jpg',
-  'photos/4.jpg',
-  'photos/5.jpg',
-  'photos/6.jpg',
-  'photos/7.jpg',
-  'photos/8.jpg',
-  'photos/9.jpg',
-  'photos/10.jpg',
-  'photos/11.jpg',
-  'photos/12.jpg',
-  'photos/13.jpg',
-  'photos/14.jpg',
-  'photos/15.jpg',
-  'photos/16.jpg',
-  'photos/17.jpg',
-  'photos/18.jpg',
-  'photos/19.jpg',
-  'photos/20.jpg',
-  'photos/21.jpg',
-  'photos/22.jpg',
-  'photos/23.jpg',
-  'photos/24.jpg',
-  'photos/25.jpg'
-];
+const NUMBERS_ID_PHOTO = Array.from({ length: 25 }, (v, i) =>  i + 1);
+
+const NUMBERS_NAME_PHOTO = Array.from({ length: 25 }, (v, i) =>  i + 1);
 
 const DEFINITION = [
   'Красиво!',
@@ -66,6 +42,8 @@ const NAMES_AUTHORS = [
   'Миша'
 ];
 
+const SIMILAR_DESCRIPTIONS_PHOTOS_COUNT = 25;
+
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -77,17 +55,32 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-getRandomInt(1, 10);
-
 const checkStringLength = (string, maxLength) => string.length <= maxLength;
 
 checkStringLength('Комментарий', 140);
 
 const getRandomArrayElement = (elements) => elements[getRandomInt(0, elements.length - 1)];
 
+
 const createListComments = () => ({
-  id: getRandomInt(0, 135),
+  id: getRandomArrayElement(NUMBERS_ID_COMMENTS),
   avatar: `img/avatar-${  getRandomInt(0, 6)  }.svg`,
   message: getRandomArrayElement(TEXT_COMMENTS),
   name: getRandomArrayElement(NAMES_AUTHORS),
 });
+
+const NUMBERS_OF_COMMENTS = getRandomInt(1, 5);
+const similarComments = Array.from({length: NUMBERS_OF_COMMENTS}, createListComments);
+
+const getDescriptionPhotos = () => ({
+  id: getRandomArrayElement(NUMBERS_ID_PHOTO),
+  url: `photos/${  getRandomInt(NUMBERS_NAME_PHOTO)  }.jpg`,
+  description: getRandomArrayElement(DEFINITION),
+  likes: getRandomInt(15, 200),
+  comments: similarComments
+});
+
+const similarDescriptionPhotos = Array.from({length: SIMILAR_DESCRIPTIONS_PHOTOS_COUNT}, getDescriptionPhotos);
+
+// eslint-disable-next-line no-console
+console.log(similarDescriptionPhotos);
