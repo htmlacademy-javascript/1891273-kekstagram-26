@@ -1,4 +1,10 @@
-const DEFINITION = [
+const SIMILAR_DESCRIPTIONS_PHOTOS_COUNT = 25;
+const NUMBERS_OF_COMMENTS = 4;
+const MAXIMUM_AVATAR_NUMBER = 6;
+const MINIMUM_NUMBER_OF_LIKES = 1;
+const MAXIMUM_NUMBER_OF_LIKES = 200;
+
+const DEFINITIONS = [
   'Красиво!',
   'Странное искуство',
   'Милашки',
@@ -26,7 +32,7 @@ const TEXT_COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-const NAMES_AUTHORS = [
+const NAMES_OF_AUTHORS = [
   'Игорь',
   'Света',
   'Катя',
@@ -35,9 +41,6 @@ const NAMES_AUTHORS = [
   'Стас',
   'Миша'
 ];
-
-const SIMILAR_DESCRIPTIONS_PHOTOS_COUNT = 25;
-const NUMBERS_OF_COMMENTS = 4;
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -50,36 +53,42 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const getRandomArrayElement = (elements) => elements[getRandomInt(0, elements.length - 1)];
+const getRandomArrayElement = (elements) => {
+  const index = getRandomInt(0, elements.length - 1);
 
-const createListComments = (id) => ({
+  return elements[index];
+};
+
+const generateCommentData = (id) => ({
   id,
-  avatar: `img/avatar-${  getRandomInt(0, 6)  }.svg`,
+  avatar: `img/avatar-${  getRandomInt(0, MAXIMUM_AVATAR_NUMBER)  }.svg`,
   message: getRandomArrayElement(TEXT_COMMENTS),
-  name: getRandomArrayElement(NAMES_AUTHORS),
+  name: getRandomArrayElement(NAMES_OF_AUTHORS),
 });
 
 const makeComments = (count) => {
-  const similarComments = [];
+  const comments = [];
   for (let i = 1; i <= count; i++) {
-    similarComments.push(createListComments(i));
+    const commentIndex = generateCommentData(i);
+    comments.push(commentIndex);
   }
 
-  return similarComments;
+  return comments;
 };
 
-const getDescriptionPhotos = (id) => ({
+const getPhotosDescription = (id) => ({
   id,
   url: `photos/${  id  }.jpg`,
-  description: getRandomArrayElement(DEFINITION),
-  likes: getRandomInt(15, 200),
+  description: getRandomArrayElement(DEFINITIONS),
+  likes: getRandomInt(MINIMUM_NUMBER_OF_LIKES, MAXIMUM_NUMBER_OF_LIKES),
   comments: makeComments(NUMBERS_OF_COMMENTS)
 });
 
 const makePhotos = (count) => {
   const similarPhotos = [];
   for (let i = 1; i <= count; i++) {
-    similarPhotos.push(getDescriptionPhotos(i));
+    const photoIndex = getPhotosDescription(i);
+    similarPhotos.push(photoIndex);
   }
 
   return similarPhotos;
