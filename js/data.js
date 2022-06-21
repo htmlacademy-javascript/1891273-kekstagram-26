@@ -1,7 +1,6 @@
-import {getRandomArrayElement} from './util.js';
-import {getRandomInt} from './util.js';
+import { getRandomArrayElement } from './util.js';
+import { getRandomInt } from './util.js';
 
-const SIMILAR_DESCRIPTIONS_PHOTOS_COUNT = 25;
 const NUMBERS_OF_COMMENTS = 4;
 const MAXIMUM_AVATAR_NUMBER = 6;
 const MINIMUM_NUMBER_OF_LIKES = 1;
@@ -80,4 +79,4 @@ const makePhotos = (count) => {
   return similarPhotos;
 };
 
-makePhotos(SIMILAR_DESCRIPTIONS_PHOTOS_COUNT);
+export { makePhotos };
