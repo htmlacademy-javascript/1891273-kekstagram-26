@@ -1,1 +1,3 @@
-import './rendering-thumbnails.js';
+import { renderPhotos } from './rendering-thumbnails.js';
+
+renderPhotos();
