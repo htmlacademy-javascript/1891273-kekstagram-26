@@ -5,8 +5,9 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 
 const similarListFragment = document.createDocumentFragment();
 
-const renderPhotos = (count) => {
-  const arrayPhotos = makePhotos(count);
+const arrayPhotos = makePhotos();
+
+const renderPhotos = () => {
   arrayPhotos.forEach(({url, likes, comments}) => {
     const pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__comments').textContent = comments;
