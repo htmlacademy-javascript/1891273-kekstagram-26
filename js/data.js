@@ -2,25 +2,26 @@ import { getRandomArrayElement } from './util.js';
 import { getRandomInt } from './util.js';
 
 const NUMBERS_OF_COMMENTS = 4;
+const MINIMUM_AVATAR_NUMBER = 1;
 const MAXIMUM_AVATAR_NUMBER = 6;
 const MINIMUM_NUMBER_OF_LIKES = 1;
 const MAXIMUM_NUMBER_OF_LIKES = 200;
 
 const DEFINITIONS = [
   'Красиво!',
-  'Странное искуство',
+  'Странное искусcтво',
   'Милашки',
   'Гуляем',
-  'Семья',
-  'Любимый',
-  'Сестренка',
-  'Друзья',
-  'Интересно, но факт',
+  'Прекрасно',
+  'Невероятно',
+  'Странно',
+  'Интересно',
+  'Неизвестно, но факт',
   'Почему бы и ДА',
   'Все прекрасно',
-  'Кексик',
-  'Мамуля',
-  'Папуля',
+  'Круто',
+  'Не круто',
+  'Что за прелесть',
   'Зачем?',
   'Живое фото'
 ];
@@ -46,7 +47,7 @@ const NAMES_OF_AUTHORS = [
 
 const generateCommentData = (id) => ({
   id,
-  avatar: `img/avatar-${  getRandomInt(0, MAXIMUM_AVATAR_NUMBER)  }.svg`,
+  avatar: `img/avatar-${  getRandomInt(MINIMUM_AVATAR_NUMBER, MAXIMUM_AVATAR_NUMBER)  }.svg`,
   message: getRandomArrayElement(TEXT_COMMENTS),
   name: getRandomArrayElement(NAMES_OF_AUTHORS),
 });
@@ -79,4 +80,4 @@ const makePhotos = (count) => {
   return similarPhotos;
 };
 
-export { makePhotos };
+export { makePhotos, getPhotosDescription, makeComments };
