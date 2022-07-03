@@ -26,11 +26,11 @@ const uploadImage = () => {
   });
   zoomInButton.addEventListener('click', () => {
     if (zoomValueInNumbers < MAX_SCALE - SCALING_STEP) {
-      const zoomIn = zoomValueInNumbers + SCALING_STEP;
-      zoomValueAsAPercentage = `${ zoomIn }%`;
+      zoomValueInNumbers = zoomValueInNumbers + SCALING_STEP;
     } else {
-      zoomValueAsAPercentage = `${ MAX_SCALE }%`;
+      zoomValueInNumbers = MAX_SCALE;
     }
+    zoomValueAsAPercentage = `${ zoomValueInNumbers }%`;
   });
 };
 
