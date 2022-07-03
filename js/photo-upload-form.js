@@ -11,6 +11,12 @@ const zoomInButton = document.querySelector('.scale__control--bigger');
 const zoomControl = document.querySelector('.scale__control--value');
 const imgageUploadPreview = document.querySelector('.img-upload__preview');
 const uploadedImage = imgageUploadPreview.querySelector('img');
+const effectNoneButton = document.querySelector('#effect-none');
+const effectChromeButton = document.querySelector('#effect-chrome');
+const effectSepiaButton = document.querySelector('#effect-sepia');
+const effectMarvinButton = document.querySelector('#effect-marvin');
+const effectPhobosButton = document.querySelector('#effect-phobos');
+const effectHeatButton = document.querySelector('#effect-heat');
 
 const uploadImage = () => {
   imageUploadForm.addEventListener('change', () => {
