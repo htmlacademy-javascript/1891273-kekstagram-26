@@ -3,6 +3,7 @@ import { renderPhotos } from './rendering-thumbnails.js';
 import { makePhotos } from './data.js';
 import { getPhotosDescription } from './data.js';
 import { getRandomInt } from './util.js';
+import { uploadImage } from './photo-upload-form.js';
 
 const PHOTOS_COUNT = 25;
 const MIN_ID_IMAGE = 1;
@@ -13,3 +14,4 @@ const imageData = getPhotosDescription(idImage);
 
 renderPhotos(photosData);
 renderBigImage(imageData);
+uploadImage();
