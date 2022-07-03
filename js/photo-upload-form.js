@@ -8,29 +8,48 @@ const imageUploadForm = document.querySelector('#upload-file');
 const imageEditingForm = document.querySelector('.img-upload__overlay');
 const zoomOutButton = document.querySelector('.scale__control--smaller');
 const zoomInButton = document.querySelector('.scale__control--bigger');
-let zoomValueAsAPercentage = document.querySelector('.scale__control--value').value;
-let zoomValueInNumbers = Math.floor(zoomValueAsAPercentage.replace('%', ''));
+const zoomControl = document.querySelector('.scale__control--value');
+const imgageUploadPreview = document.querySelector('.img-upload__preview');
+const uploadedImage = imgageUploadPreview.querySelector('img');
 
 const uploadImage = () => {
   imageUploadForm.addEventListener('change', () => {
     imageEditingForm.classList.remove('hidden');
     body.classList.add('modal-open');
   });
-  zoomOutButton.addEventListener('click', () => {
-    if (zoomValueInNumbers > MIN_SCALE) {
-      zoomValueInNumbers = zoomValueInNumbers - SCALING_STEP;
-    } else {
-      zoomValueInNumbers = MIN_SCALE;
+  const changeImageSize = () => {
+    if (zoomControl.value === '25%') {
+      uploadedImage.style = 'transform: scale(0.25)';
     }
-    zoomValueAsAPercentage = `${ zoomValueInNumbers }%`;
+    if (zoomControl.value === '50%') {
+      uploadedImage.style = 'transform: scale(0.5)';
+    }
+    if (zoomControl.value === '75%') {
+      uploadedImage.style = 'transform: scale(0.75)';
+    }
+    if (zoomControl.value === '100%') {
+      uploadedImage.style = 'transform: scale(1)';
+    }
+  };
+  zoomOutButton.addEventListener('click', () => {
+    let zoomControlValue = Math.floor(zoomControl.value.replace('%', ''));
+    if (zoomControlValue > MIN_SCALE) {
+      zoomControlValue = zoomControlValue - SCALING_STEP;
+    } else {
+      zoomControlValue = MIN_SCALE;
+    }
+    zoomControl.value = `${ zoomControlValue }%`;
+    changeImageSize();
   });
   zoomInButton.addEventListener('click', () => {
-    if (zoomValueInNumbers < MAX_SCALE - SCALING_STEP) {
-      zoomValueInNumbers = zoomValueInNumbers + SCALING_STEP;
+    let zoomControlValue = Math.floor(zoomControl.value.replace('%', ''));
+    if (zoomControlValue < MAX_SCALE - SCALING_STEP) {
+      zoomControlValue = zoomControlValue + SCALING_STEP;
     } else {
-      zoomValueInNumbers = MAX_SCALE;
+      zoomControlValue = MAX_SCALE;
     }
-    zoomValueAsAPercentage = `${ zoomValueInNumbers }%`;
+    zoomControl.value = `${ zoomControlValue }%`;
+    changeImageSize();
   });
 };
 
