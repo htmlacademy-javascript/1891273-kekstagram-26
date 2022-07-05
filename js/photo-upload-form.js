@@ -11,12 +11,8 @@ const zoomInButton = document.querySelector('.scale__control--bigger');
 const zoomControl = document.querySelector('.scale__control--value');
 const imgageUploadPreview = document.querySelector('.img-upload__preview');
 const uploadedImage = imgageUploadPreview.querySelector('img');
-const effectNoneButton = document.querySelector('#effect-none');
-const effectChromeButton = document.querySelector('#effect-chrome');
-const effectSepiaButton = document.querySelector('#effect-sepia');
-const effectMarvinButton = document.querySelector('#effect-marvin');
-const effectPhobosButton = document.querySelector('#effect-phobos');
-const effectHeatButton = document.querySelector('#effect-heat');
+const slider = document.querySelector('.effect-level__slider');
+const effectsForm = document.querySelector('.effects');
 
 const uploadImage = () => {
   imageUploadForm.addEventListener('change', () => {
@@ -56,6 +52,41 @@ const uploadImage = () => {
     }
     zoomControl.value = `${ zoomControlValue }%`;
     changeImageSize();
+  });
+  noUiSlider.create(slider, {
+    start: [20, 80],
+    connect: true,
+    range: {
+      'min': 0,
+      'max': 100
+    }
+  });
+  effectsForm.addEventListener('change', (e) => {
+    if (e.target.value === 'none') {
+      slider.classList.add('hidden');
+    } else {
+      slider.classList.remove('hidden');
+    }
+    if (e.target.value === 'chrome') {
+      uploadedImage.classList.add('effects__preview--chrome');
+    } else {
+      uploadedImage.classList.remove('effects__preview--chrome');}
+    if (e.target.value === 'sepia') {
+      uploadedImage.classList.add('effects__preview--sepia');
+    } else {
+      uploadedImage.classList.remove('effects__preview--sepia');}
+    if (e.target.value === 'marvin') {
+      uploadedImage.classList.add('effects__preview--marvin');
+    } else {
+      uploadedImage.classList.remove('effects__preview--marvin');}
+    if (e.target.value === 'phobos') {
+      uploadedImage.classList.add('effects__preview--phobos');
+    } else {
+      uploadedImage.classList.remove('effects__preview--phobos');}
+    if (e.target.value === 'heat') {
+      uploadedImage.classList.add('effects__preview--heat');
+    } else {
+      uploadedImage.classList.remove('effects__preview--heat');}
   });
 };
 
