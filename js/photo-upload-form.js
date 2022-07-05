@@ -13,6 +13,7 @@ const uploadedImage = imgageUploadPreview.querySelector('img');
 const slider = document.querySelector('.effect-level__slider');
 const effectsForm = document.querySelector('.effects');
 const effectLevelValue = document.querySelector('.effect-level__value');
+
 const uploadImage = () => {
   imageUploadForm.addEventListener('change', () => {
     imageEditingForm.classList.remove('hidden');
