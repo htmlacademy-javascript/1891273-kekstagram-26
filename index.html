@@ -40,7 +40,7 @@
             </fieldset>
 
             <!-- Форма редактирования изображения -->
-            <div class="img-upload__overlay">
+            <div class="img-upload__overlay hidden">
               <div class="img-upload__wrapper">
                 <div class="img-upload__preview-container">
 
@@ -120,7 +120,7 @@
                     <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег">
                   </div>
                   <div class="img-upload__field-wrapper">
-                    <textarea class="text__description" name="description" placeholder="Ваш комментарий..."></textarea>
+                    <textarea class="text__description" name="description" placeholder="Ваш комментарий..." maxlength="140"></textarea>></textarea>
                   </div>
                 </fieldset>
 
@@ -234,5 +234,6 @@
   </template>
   <script src="js/main.js" type="module"></script>
   <script src="nouislider/nouislider.js"></script>
+  <script src="pristine/pristine.min.js"></script>
 </body>
 </html>
