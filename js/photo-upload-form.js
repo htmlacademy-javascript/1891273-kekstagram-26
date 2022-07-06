@@ -22,6 +22,8 @@ const hashtagsInput = document.querySelector('.text__hashtags');
 const commentInput = document.querySelector('.text__description');
 const cancelButton = document.querySelector('.img-upload__cancel');
 
+const form = document.querySelector('.img-upload__form');
+
 const uploadImage = () => {
   imageUploadForm.addEventListener('change', () => {
     imageEditingForm.classList.remove('hidden');
@@ -74,11 +76,6 @@ const uploadImage = () => {
     uploadedImage.style.filter = effect;
     uploadedImage.classList.add(effectClass);
   };
-  cancelButton.addEventListener('click', () => {
-    imageUploadForm.value = '';
-    imageEditingForm.classList.add('hidden');
-    body.classList.remove('modal-open');
-  });
   effectsForm.addEventListener('change', (e) => {
     if (e.target.value !== 'none') {
       slider.classList.remove('hidden');
@@ -137,7 +134,7 @@ const uploadImage = () => {
     } else {
       uploadedImage.classList.remove('effects__preview--heat');}
   });
-  const pristine = new Pristine (imageUploadForm, {
+  const pristine = new Pristine (form, {
     classTo: 'img-upload__field-wrapper',
     errorClass: 'form-item__invalid',
     successClass: 'form-item__valid',
@@ -159,9 +156,10 @@ const uploadImage = () => {
     }
     return true;
   };
-  const validateComment = (value) =>  value.length <= MAX_LENGTH_COMMENT;
-  pristine.addValidator(commentInput, validateComment,
-    'Комментарий не должен быть длиннее 140 символов');
+  pristine.addValidator(commentInput, (value) => {
+    const condition =  value.length <= MAX_LENGTH_COMMENT || value.length > 0;
+    return condition;
+  }, 'Комментарий не должен быть длиннее 140 символов');
 
   pristine.addValidator(hashtagsInput, (hashtags) => preparedHashtags(hashtags).length <= MAX_NUMBER_HASHTAGS,
     'Максимальное колличество хэштегов 5');
@@ -178,9 +176,17 @@ const uploadImage = () => {
   pristine.addValidator(hashtagsInput, (hashtags) => hashtags === '' || preparedHashtags(hashtags).every((value) => value.length >= 2 && value.length <= MAX_LENGTH_HASHTAG),
     'Максимальная длина хэштега 20 символов');
 
-  imageUploadForm.addEventListener('submit', (evt) => {
-    if(!pristine.validate()) {
-      evt.preventDefault();}
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    pristine.validate();
+    imageUploadForm.value = '';
+    imageEditingForm.classList.add('hidden');
+    body.classList.remove('modal-open');
+  });
+  cancelButton.addEventListener('click', () => {
+    imageUploadForm.value = '';
+    imageEditingForm.classList.add('hidden');
+    body.classList.remove('modal-open');
   });
 };
 
