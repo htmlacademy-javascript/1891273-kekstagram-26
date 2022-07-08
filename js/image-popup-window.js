@@ -7,6 +7,7 @@ const NUMBERS_OF_COMMENTS = getRandomInt(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENT
 const NUMBERS_OF_READY_COMMENTS = 2;
 const AVATAR_WIDTH = 35;
 const AVATAR_HEIGHT = 35;
+// const NUMBER_UPLOADED_COMMENTS = 5;
 
 const popupImage = document.querySelector('.big-picture');
 const imageBlock = popupImage.querySelector('.big-picture__img');
@@ -16,9 +17,19 @@ const commentList = popupImage.querySelector('.social__comments');
 const commentTemplate = commentList.querySelector('.social__comment');
 const closePopupButton = document.querySelector('.big-picture__cancel');
 const body = document.querySelector('body');
+const commentsUploadButton = document.querySelector('.social__comments-loader');
+
+// const groupComments = (array, numberElement) => {
+//   const  downloadableComments = [];
+//   for (let i = 0; i < array.length; i += numberElement) {
+//     const arrayPart   = array.slice(i, i + numberElement);
+//     downloadableComments.push(arrayPart);
+//   }
+//   return downloadableComments;
+// };
 
 const renderBigImage = (photoData) => {
-  // popupImage.classList.remove('hidden');
+  popupImage.classList.remove('hidden');
   image.setAttribute('src', photoData.url);
   popupImage.querySelector('.likes-count').textContent = photoData.likes;
   popupImage.querySelector('.comments-count').textContent = NUMBERS_OF_COMMENTS + NUMBERS_OF_READY_COMMENTS;
@@ -31,13 +42,40 @@ const renderBigImage = (photoData) => {
     avatarItem.setAttribute('width', AVATAR_WIDTH);
     avatarItem.setAttribute('height', AVATAR_HEIGHT);
     comment.querySelector('.social__text').textContent = message;
+    comment.classList.add('hidden');
     commentList.appendChild(comment);
   });
-  const commentCount = document.querySelector('.social__comment-count');
-  commentCount.classList.add('hidden');
-  const uploadingNewComments = document.querySelector('.comments-loader');
-  uploadingNewComments.classList.add('hidden');
-  body.classList.add('modal-open');
+  const comments = commentList.querySelectorAll('.social__comment');
+  const arrayGroup = [];
+
+  for (let i = 0; i < comments.length; i++) {
+    arrayGroup.push(comments[i]);
+  }
+  for (let i = 0; i <= arrayGroup.length; i++) {
+    commentsUploadButton.addEventListener('click', () => {
+      arrayGroup[i].classList.remove('hidden');
+      commentsUploadButton.classList.add('hidden');
+    });
+  }
+  // const dividedArray = groupComments(arrayGroup, NUMBER_UPLOADED_COMMENTS);
+  // console.log(dividedArray);
+  // for (let i = 0; i <= dividedArray.length -1; i++) {
+  //   const commentGroup = dividedArray[i];
+  //   console.log(commentGroup);
+  //   for (let j = 1; j <= commentGroup.length; j++) {
+  //     commentsUploadButton.addEventListener('click', () => {
+  //       commentGroup[i].classList.remove('hidden');
+  //       // commentsUploadButton.classList.add('hidden');
+  //     });
+  //   }
+  // }
+  //   commentsUploadButton.addEventListener('click', () => {
+  //     commentGroup[i].classList.remove('hidden');
+  //     commentsUploadButton.classList.add('hidden');
+  //   });
+  // }
+
+  // body.classList.add('modal-open');
 };
 
 closePopupButton.addEventListener('click', () => {
