@@ -18,7 +18,7 @@ const closePopupButton = document.querySelector('.big-picture__cancel');
 const body = document.querySelector('body');
 
 const renderBigImage = (photoData) => {
-  popupImage.classList.remove('hidden');
+  // popupImage.classList.remove('hidden');
   image.setAttribute('src', photoData.url);
   popupImage.querySelector('.likes-count').textContent = photoData.likes;
   popupImage.querySelector('.comments-count').textContent = NUMBERS_OF_COMMENTS + NUMBERS_OF_READY_COMMENTS;
