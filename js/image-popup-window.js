@@ -90,4 +90,4 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-export { renderBigImage, body };
+export { renderBigImage };
