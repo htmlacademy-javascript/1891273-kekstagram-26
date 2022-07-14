@@ -7,7 +7,7 @@ const NUMBERS_OF_COMMENTS = getRandomInt(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENT
 const NUMBERS_OF_READY_COMMENTS = 2;
 const AVATAR_WIDTH = 35;
 const AVATAR_HEIGHT = 35;
-// const NUMBER_UPLOADED_COMMENTS = 5;
+const NUMBER_UPLOADED_COMMENTS = 5;
 
 const popupImage = document.querySelector('.big-picture');
 const imageBlock = popupImage.querySelector('.big-picture__img');
@@ -19,14 +19,14 @@ const closePopupButton = document.querySelector('.big-picture__cancel');
 const body = document.querySelector('body');
 const commentsUploadButton = document.querySelector('.social__comments-loader');
 
-// const groupComments = (array, numberElement) => {
-//   const  downloadableComments = [];
-//   for (let i = 0; i < array.length; i += numberElement) {
-//     const arrayPart   = array.slice(i, i + numberElement);
-//     downloadableComments.push(arrayPart);
-//   }
-//   return downloadableComments;
-// };
+const groupComments = (array, numberElement) => {
+  const  downloadableComments = [];
+  for (let i = 0; i < array.length; i += numberElement) {
+    const arrayPart   = array.slice(i, i + numberElement);
+    downloadableComments.push(arrayPart);
+  }
+  return downloadableComments;
+};
 
 const renderBigImage = (photoData) => {
   popupImage.classList.remove('hidden');
@@ -46,34 +46,22 @@ const renderBigImage = (photoData) => {
     commentList.appendChild(comment);
   });
   const comments = commentList.querySelectorAll('.social__comment');
-  const arrayGroup = [];
+  const arrayComments = [];
 
   for (let i = 0; i < comments.length; i++) {
-    arrayGroup.push(comments[i]);
+    arrayComments.push(comments[i]);
   }
-  for (let i = 0; i <= arrayGroup.length; i++) {
-    commentsUploadButton.addEventListener('click', () => {
-      arrayGroup[i].classList.remove('hidden');
-      commentsUploadButton.classList.add('hidden');
-    });
-  }
-  // const dividedArray = groupComments(arrayGroup, NUMBER_UPLOADED_COMMENTS);
-  // console.log(dividedArray);
-  // for (let i = 0; i <= dividedArray.length -1; i++) {
-  //   const commentGroup = dividedArray[i];
-  //   console.log(commentGroup);
-  //   for (let j = 1; j <= commentGroup.length; j++) {
-  //     commentsUploadButton.addEventListener('click', () => {
-  //       commentGroup[i].classList.remove('hidden');
-  //       // commentsUploadButton.classList.add('hidden');
-  //     });
-  //   }
-  // }
-  //   commentsUploadButton.addEventListener('click', () => {
-  //     commentGroup[i].classList.remove('hidden');
-  //     commentsUploadButton.classList.add('hidden');
-  //   });
-  // }
+
+  const dividedArray = groupComments(arrayComments, NUMBER_UPLOADED_COMMENTS);
+  console.log(dividedArray);
+  commentsUploadButton.addEventListener('click', () => {
+    for (let i = 0; i <= dividedArray.length - 1; i++) {
+      const commentGroup = dividedArray[i];
+      commentGroup[i].classList.remove('hidden');
+      // commentsUploadButton.classList.add('hidden');
+      console.log(commentGroup);
+    }
+  });
 
   // body.classList.add('modal-open');
 };
