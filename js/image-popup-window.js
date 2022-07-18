@@ -54,7 +54,7 @@ const renderComments = (start, end) => {
 const renderBigImage = (photoData) => {
   let commentsLimit = 5;
   let commentStart = 0;
-  popupImage.classList.remove('hidden');
+  // popupImage.classList.remove('hidden');
   image.setAttribute('src', photoData.url);
   popupImage.querySelector('.likes-count').textContent = photoData.likes;
   popupImage.querySelector('.comments-count').textContent = NUMBERS_OF_COMMENTS + NUMBERS_OF_READY_COMMENTS;

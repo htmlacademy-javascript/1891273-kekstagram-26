@@ -20,17 +20,8 @@ const photosData = makePhotos(PHOTOS_COUNT);
 const idImage = getRandomInt(MIN_ID_IMAGE, MAX_ID_IMAGE);
 const imageData = getPhotosDescription(idImage);
 const form = document.querySelector('.img-upload__form');
-const slider = document.querySelector('.effect-level__slider');
 
 const pristine = new Pristine (form, CLASS_OBJECT, false);
-noUiSlider.create(slider, {
-  start: [100],
-  connect: 'lower',
-  range: {
-    'min': 0,
-    'max': 100
-  }
-});
 
 renderPhotos(photosData);
 renderBigImage(imageData);
