@@ -1,6 +1,7 @@
 import { renderPhotos } from './rendering-thumbnails.js';
 import { uploadImage } from './photo-upload-form.js';
 import { showAlert } from './util.js';
+import { getData } from './api.js';
 
 const CLASS_OBJECT = {
   classTo: 'img-upload__field-wrapper',
@@ -14,11 +15,5 @@ const form = document.querySelector('.img-upload__form');
 
 const pristine = new Pristine (form, CLASS_OBJECT, false);
 
-fetch('https://26.javascript.pages.academy/kekstagram/data')
-  .then((response) => response.json())
-  .then((picture) => {
-    renderPhotos(picture);
-  })
-  .catch(() => showAlert('Фото не загружены. Проверьте соединение.'));
-
 uploadImage(pristine);
+getData(renderPhotos, showAlert, 'Фото не загружены. Проверьте соединение.');

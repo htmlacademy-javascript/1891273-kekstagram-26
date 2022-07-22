@@ -1,3 +1,5 @@
+import { sendData } from './api.js';
+
 const MAX_NUMBER_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
 const MAX_LENGTH_HASHTAG = 20;
@@ -21,6 +23,7 @@ const uploadedImage = uploadedImageBlock.querySelector('img');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectsForm = document.querySelector('.effects');
 const slider = document.querySelector('.effect-level__slider');
+const submitButton = document.querySelector('.img-upload__submit');
 
 noUiSlider.create(slider, {
   start: [100],
@@ -176,7 +179,6 @@ const closeWindow = () => {
   effectsForm.removeEventListener('change', selectEffect);
   imageEditingForm.classList.add('hidden');
   body.classList.remove('modal-open');
-  console.log('Окно закрылось');
 };
 
 const openDownloadWindow = () => {
@@ -235,7 +237,6 @@ const openSubmitWindow = () => {
   const cancelButtonMessage = sendingMessage.querySelector('.success__button');
   cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton));
   document.addEventListener('keydown', checkButton);
-  console.log('Открылось окно успешной отправки');
 };
 
 const messageErrorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -247,7 +248,16 @@ const openErrorWindow = () => {
   const cancelButtonMessage = sendingErrorMessage.querySelector('.error__button');
   cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton));
   document.addEventListener('keydown', checkButton);
-  console.log('Открылось окно об ошибке');
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикуем...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
 };
 
 const uploadImage = (pristine) => {
@@ -262,17 +272,11 @@ const uploadImage = (pristine) => {
     evt.preventDefault();
     const valid = pristine.validate();
     if  (valid) {
-      const formData = new FormData(evt.target);
-      fetch(
-        'https://26.javascript.pages.academy/kekstagra',
-        {
-          method: 'POST',
-          body: formData,
-        },
-      )
-        .then(() => closeWindow())
-        .then(() => openSubmitWindow())
-        .catch(() => openErrorWindow());
+      blockSubmitButton();
+      sendData(
+        () => {closeWindow(); openSubmitWindow(); unblockSubmitButton();},
+        () => {openErrorWindow(); unblockSubmitButton();},
+        new FormData(evt.target));
     }
   });
 };
