@@ -176,6 +176,7 @@ const closeWindow = () => {
   effectsForm.removeEventListener('change', selectEffect);
   imageEditingForm.classList.add('hidden');
   body.classList.remove('modal-open');
+  console.log('Окно закрылось');
 };
 
 const openDownloadWindow = () => {
@@ -210,6 +211,45 @@ const mistakes = [
   }
 ];
 
+
+const blockMessage = document.createElement('div');
+const messageTemplate = document.querySelector('#success').content.querySelector('.success');
+const sendingMessage = messageTemplate.cloneNode(true);
+
+const closeSendingMessage = (closeKey) => {
+  const cancelButtonMessage = sendingMessage.querySelector('.success__button');
+  cancelButtonMessage.removeEventListener('click', closeSendingMessage);
+  document.addEventListener('keydown', closeKey);
+  body.removeChild(blockMessage);
+};
+
+const checkButton = (e) => {
+  if (e.keyCode === 27) {
+    closeSendingMessage();
+  }
+};
+
+const openSubmitWindow = () => {
+  blockMessage.appendChild(sendingMessage);
+  body.appendChild(blockMessage);
+  const cancelButtonMessage = sendingMessage.querySelector('.success__button');
+  cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton));
+  document.addEventListener('keydown', checkButton);
+  console.log('Открылось окно успешной отправки');
+};
+
+const messageErrorTemplate = document.querySelector('#error').content.querySelector('.error');
+const sendingErrorMessage = messageErrorTemplate.cloneNode(true);
+
+const openErrorWindow = () => {
+  blockMessage.appendChild(sendingErrorMessage);
+  body.appendChild(blockMessage);
+  const cancelButtonMessage = sendingErrorMessage.querySelector('.error__button');
+  cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton));
+  document.addEventListener('keydown', checkButton);
+  console.log('Открылось окно об ошибке');
+};
+
 const uploadImage = (pristine) => {
   imageUploadForm.addEventListener('change', openDownloadWindow);
   mistakes.forEach( (obj) => {
@@ -219,10 +259,21 @@ const uploadImage = (pristine) => {
   pristine.addValidator(commentInput, validateCommentLength, 'Комментарий не должен быть длиннее 140 символов');
 
   form.addEventListener('submit', (evt) => {
-    if  (pristine.validate()) {
-      closeWindow();
-    }
     evt.preventDefault();
+    const valid = pristine.validate();
+    if  (valid) {
+      const formData = new FormData(evt.target);
+      fetch(
+        'https://26.javascript.pages.academy/kekstagra',
+        {
+          method: 'POST',
+          body: formData,
+        },
+      )
+        .then(() => closeWindow())
+        .then(() => openSubmitWindow())
+        .catch(() => openErrorWindow());
+    }
   });
 };
 
