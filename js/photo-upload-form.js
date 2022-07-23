@@ -260,9 +260,9 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-const uploadImage = (pristine) => {
+const initForm = (pristine) => {
   imageUploadForm.addEventListener('change', openDownloadWindow);
-  mistakes.forEach( (obj) => {
+  mistakes.forEach((obj) => {
     pristine.addValidator(hashtagsInput, obj.check, obj.comment);
   }
   );
@@ -281,5 +281,5 @@ const uploadImage = (pristine) => {
   });
 };
 
-export { uploadImage };
+export { initForm };
 

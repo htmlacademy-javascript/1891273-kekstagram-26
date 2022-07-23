@@ -20,7 +20,7 @@ const commentsUploadButton = document.querySelector('.social__comments-loader');
 const commentsNumberText = document.querySelector('.comments-number');
 const commentsNumber = popupImage.querySelector('.comments-number');
 
-const renderComment = (comment) => {
+const getCommentsData = (comment) => {
   const commentItem = document.createElement('li');
   commentItem.classList.add('social__comment');
   const imageItem = document.createElement('img');
@@ -37,14 +37,22 @@ const renderComment = (comment) => {
   return commentItem;
 };
 
-const renderComments = (start, end, comments) => {
+const createComments = (start, end, comments) => {
   const showedComments = comments.slice(start, end);
-  const commentsArray = showedComments.map((comment) => renderComment(comment));
+  const commentsArray = showedComments.map((comment) => getCommentsData(comment));
+  const fragment = document.createDocumentFragment();
   for (let i = 0; i <= commentsArray.length - 1; i++) {
-    commentList.append(commentsArray[i]);
+    fragment.append(commentsArray[i]);
   }
-  commentsNumber.textContent = commentsArray.length;
-  if (end >= comments.length) {
+  return fragment;
+};
+
+const renderComments = (start, end, comments) => {
+  const fragment =  createComments(start, end, comments);
+  commentList.append(fragment);
+  const numberVisibleСomments = document.querySelectorAll('.social__comment');
+  commentsNumber.textContent = numberVisibleСomments.length;
+  if (end > numberVisibleСomments.length && end !== COMMENTS_STEP) {
     commentsUploadButton.style.visibility = 'hidden';
   } else {
     commentsUploadButton.style.visibility = '';
