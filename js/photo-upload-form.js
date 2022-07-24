@@ -218,16 +218,24 @@ const blockMessage = document.createElement('div');
 const messageTemplate = document.querySelector('#success').content.querySelector('.success');
 const sendingMessage = messageTemplate.cloneNode(true);
 
-const closeSendingMessage = (closeKey) => {
+const closeSendingMessage = (closeKey, checkArea) => {
   const cancelButtonMessage = sendingMessage.querySelector('.success__button');
   cancelButtonMessage.removeEventListener('click', closeSendingMessage);
-  document.addEventListener('keydown', closeKey);
-  body.removeChild(blockMessage);
+  document.removeEventListener('keydown', closeKey);
+  document.removeEventListener('click', checkArea);
+  blockMessage.remove();
 };
 
 const checkButton = (e) => {
   if (e.keyCode === 27) {
-    closeSendingMessage();
+    closeSendingMessage(checkButton);
+  }
+};
+
+const checkClickArea = (e) => {
+  const block = document.querySelector('.success__inner');
+  if (e.target !== block) {
+    closeSendingMessage(checkButton, checkClickArea);
   }
 };
 
@@ -235,8 +243,9 @@ const openSubmitWindow = () => {
   blockMessage.appendChild(sendingMessage);
   body.appendChild(blockMessage);
   const cancelButtonMessage = sendingMessage.querySelector('.success__button');
-  cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton));
+  cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton, checkClickArea));
   document.addEventListener('keydown', checkButton);
+  document.addEventListener('click', checkClickArea);
 };
 
 const messageErrorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -246,8 +255,9 @@ const openErrorWindow = () => {
   blockMessage.appendChild(sendingErrorMessage);
   body.appendChild(blockMessage);
   const cancelButtonMessage = sendingErrorMessage.querySelector('.error__button');
-  cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton));
+  cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton, checkClickArea));
   document.addEventListener('keydown', checkButton);
+  document.addEventListener('click', checkClickArea);
 };
 
 const blockSubmitButton = () => {
