@@ -1,3 +1,5 @@
+import { sendData } from './api.js';
+
 const MAX_NUMBER_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
 const MAX_LENGTH_HASHTAG = 20;
@@ -21,6 +23,7 @@ const uploadedImage = uploadedImageBlock.querySelector('img');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectsForm = document.querySelector('.effects');
 const slider = document.querySelector('.effect-level__slider');
+const submitButton = document.querySelector('.img-upload__submit');
 
 noUiSlider.create(slider, {
   start: [100],
@@ -210,21 +213,83 @@ const mistakes = [
   }
 ];
 
-const uploadImage = (pristine) => {
+
+const blockMessage = document.createElement('div');
+const messageTemplate = document.querySelector('#success').content.querySelector('.success');
+const sendingMessage = messageTemplate.cloneNode(true);
+
+const closeSendingMessage = (closeKey, checkArea) => {
+  const cancelButtonMessage = sendingMessage.querySelector('.success__button');
+  cancelButtonMessage.removeEventListener('click', closeSendingMessage);
+  document.removeEventListener('keydown', closeKey);
+  document.removeEventListener('click', checkArea);
+  blockMessage.remove();
+};
+
+const checkButton = (e) => {
+  if (e.keyCode === 27) {
+    closeSendingMessage(checkButton);
+  }
+};
+
+const checkClickArea = (e) => {
+  const block = document.querySelector('.success__inner');
+  if (e.target !== block) {
+    closeSendingMessage(checkButton, checkClickArea);
+  }
+};
+
+const openSubmitWindow = () => {
+  blockMessage.appendChild(sendingMessage);
+  body.appendChild(blockMessage);
+  const cancelButtonMessage = sendingMessage.querySelector('.success__button');
+  cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton, checkClickArea));
+  document.addEventListener('keydown', checkButton);
+  document.addEventListener('click', checkClickArea);
+};
+
+const messageErrorTemplate = document.querySelector('#error').content.querySelector('.error');
+const sendingErrorMessage = messageErrorTemplate.cloneNode(true);
+
+const openErrorWindow = () => {
+  blockMessage.appendChild(sendingErrorMessage);
+  body.appendChild(blockMessage);
+  const cancelButtonMessage = sendingErrorMessage.querySelector('.error__button');
+  cancelButtonMessage.addEventListener('click', () => closeSendingMessage(checkButton, checkClickArea));
+  document.addEventListener('keydown', checkButton);
+  document.addEventListener('click', checkClickArea);
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикуем...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const initForm = (pristine) => {
   imageUploadForm.addEventListener('change', openDownloadWindow);
-  mistakes.forEach( (obj) => {
+  mistakes.forEach((obj) => {
     pristine.addValidator(hashtagsInput, obj.check, obj.comment);
   }
   );
   pristine.addValidator(commentInput, validateCommentLength, 'Комментарий не должен быть длиннее 140 символов');
 
   form.addEventListener('submit', (evt) => {
-    if  (pristine.validate()) {
-      closeWindow();
-    }
     evt.preventDefault();
+    const valid = pristine.validate();
+    if  (valid) {
+      blockSubmitButton();
+      sendData(
+        () => {closeWindow(); openSubmitWindow(); unblockSubmitButton();},
+        () => {openErrorWindow(); unblockSubmitButton();},
+        new FormData(evt.target));
+    }
   });
 };
 
-export { uploadImage };
+export { initForm };
 
