@@ -1,4 +1,3 @@
-import { makeComments } from './data.js';
 import { getRandomInt } from './util.js';
 
 const MIN_NUMBER_COMMENTS = 3;
@@ -13,7 +12,6 @@ const COMMENTS_STEP = 5;
 const popupImage = document.querySelector('.big-picture');
 const imageBlock = popupImage.querySelector('.big-picture__img');
 const image = imageBlock.querySelector('img');
-const commentsData = makeComments(NUMBERS_OF_COMMENTS);
 const commentList = popupImage.querySelector('.social__comments');
 const commentsCount = popupImage.querySelector('.comments-count');
 const closePopupButton = document.querySelector('.big-picture__cancel');
@@ -22,7 +20,7 @@ const commentsUploadButton = document.querySelector('.social__comments-loader');
 const commentsNumberText = document.querySelector('.comments-number');
 const commentsNumber = popupImage.querySelector('.comments-number');
 
-const renderComment = (comment) => {
+const getCommentsData = (comment) => {
   const commentItem = document.createElement('li');
   commentItem.classList.add('social__comment');
   const imageItem = document.createElement('img');
@@ -39,35 +37,44 @@ const renderComment = (comment) => {
   return commentItem;
 };
 
-const renderComments = (start, end) => {
-  const showedComments = commentsData.slice(start, end);
-  const comments = showedComments.map((comment) => renderComment(comment));
-  for (let i = 0; i <= comments.length - 1; i++) {
-    commentList.append(comments[i]);
+const createComments = (start, end, comments) => {
+  const showedComments = comments.slice(start, end);
+  const commentsArray = showedComments.map((comment) => getCommentsData(comment));
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i <= commentsArray.length - 1; i++) {
+    fragment.append(commentsArray[i]);
   }
-  commentsNumber.textContent = comments.length;
-  if (end >= commentsData.length) {
+  return fragment;
+};
+
+const renderComments = (start, end, comments) => {
+  const fragment =  createComments(start, end, comments);
+  commentList.append(fragment);
+  const numberVisibleСomments = document.querySelectorAll('.social__comment');
+  commentsNumber.textContent = numberVisibleСomments.length;
+  if (end > numberVisibleСomments.length && end !== COMMENTS_STEP) {
     commentsUploadButton.style.visibility = 'hidden';
+  } else {
+    commentsUploadButton.style.visibility = '';
   }
 };
 
-const renderBigImage = (photoData) => {
+const renderBigImage = ({url, likes, comments, description}) => {
   let commentsLimit = 5;
   let commentStart = 0;
-  // popupImage.classList.remove('hidden');
-  image.setAttribute('src', photoData.url);
-  popupImage.querySelector('.likes-count').textContent = photoData.likes;
+  popupImage.classList.remove('hidden');
+  image.setAttribute('src', url);
+  popupImage.querySelector('.likes-count').textContent = likes;
   popupImage.querySelector('.comments-count').textContent = NUMBERS_OF_COMMENTS + NUMBERS_OF_READY_COMMENTS;
-  popupImage.querySelector('.social__caption').textContent = photoData.description;
-
-  commentsCount.textContent = commentsData.length;
+  popupImage.querySelector('.social__caption').textContent = description;
+  commentsCount.textContent = comments.length;
   commentList.innerHTML = '';
-  renderComments(commentStart, commentsLimit);
+  renderComments(commentStart, commentsLimit, comments);
 
   commentsUploadButton.addEventListener('click', () => {
     commentStart += COMMENTS_STEP;
     commentsLimit += COMMENTS_STEP;
-    renderComments(commentStart, commentsLimit);
+    renderComments(commentStart, commentsLimit, comments);
     const numberComment = document.querySelectorAll('.social__comment');
     commentsNumberText.textContent = numberComment.length;
   });
