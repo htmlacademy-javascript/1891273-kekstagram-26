@@ -7,6 +7,7 @@ const SCALING_STEP = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const initialEffectLevel = 100;
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const imageUploadForm = document.querySelector('#upload-file');
 const imageEditingForm = document.querySelector('.img-upload__overlay');
@@ -168,6 +169,15 @@ const checkCharacters = (hashtags) => hashtags === '' || preparedHashtags(hashta
 
 const checkHashtagLength = (hashtags) => hashtags === '' || preparedHashtags(hashtags).every((value) => value.length >= 2 && value.length <= MAX_LENGTH_HASHTAG);
 
+const uploadPicture = () => {
+  const file = imageUploadForm.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+  if (matches) {
+    uploadedImage.src = URL.createObjectURL(file);
+  }
+};
+
 const closeWindow = () => {
   imageUploadForm.value = '';
   hashtagsInput.value = '';
@@ -184,6 +194,7 @@ const closeWindow = () => {
 const openDownloadWindow = () => {
   imageEditingForm.classList.remove('hidden');
   body.classList.add('modal-open');
+  uploadPicture();
   zoomOutButton.addEventListener('click', zoomOut);
   zoomInButton.addEventListener('click', zoomIn);
   effectsForm.addEventListener('change', selectEffect);
