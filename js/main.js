@@ -17,8 +17,9 @@ const pristine = new Pristine (form, CLASS_OBJECT, false);
 
 initForm(pristine);
 getData((pictures) => {
+  const sourceFromServer = pictures;
   renderPhotos(pictures);
-  selectFilter(pictures);
+  selectFilter(sourceFromServer, pictures);
 },
 showAlert,
 'Фото не загружены. Проверьте соединение.');

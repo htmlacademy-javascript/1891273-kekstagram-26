@@ -1,4 +1,8 @@
 import { renderBigImage } from './image-popup-window.js';
+// import { debounce } from './util.js';
+
+// const RERENDER_DELAY = 500;
+const NUMBER_RANDOM_PICTURES = 10;
 
 const picturesList = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -21,9 +25,18 @@ const sortingPicture = (first, next) => {
 };
 
 const filterSettings = {
-  default: (arr) => arr,
-  random: 'shuffle',
-  popular: (arr) => arr.sort(sortingPicture),
+  default: (array) => array,
+  random:  (array) => {
+    let currentIndex = array.length,  randomIndex;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+    return array.slice(array, NUMBER_RANDOM_PICTURES);
+  },
+  popular: (array) => array.sort(sortingPicture),
 };
 
 const openFilter = () => {
@@ -37,6 +50,8 @@ const makeButtonsInactive = () => {
 };
 
 const renderPhotos = (picture) => {
+  const pictureShown = picturesList.querySelectorAll('.picture');
+  pictureShown.forEach((photo) => photo.remove());
   picture.forEach(({url, likes, comments, description}) => {
     const pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__comments').textContent = comments.length;
@@ -60,6 +75,7 @@ const selectFilter = (images) => {
       const getPictures = filterSettings[viewType];
       const pictures = getPictures(images);
       renderPhotos(pictures);
+      // debounce(() => renderPhotos(pictures), RERENDER_DELAY);
     });
   });
 };
