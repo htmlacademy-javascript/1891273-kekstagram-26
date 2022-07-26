@@ -38,12 +38,12 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-// const debounce = (callback, timeoutDelay) => {
-//   let timeoutId;
-//   return (...rest) => {
-//     clearTimeout(timeoutId);
-//     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
-//   };
-// };
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
 
-export { getRandomInt, getRandomArrayElement, showAlert };
+export { getRandomInt, getRandomArrayElement, showAlert, debounce };

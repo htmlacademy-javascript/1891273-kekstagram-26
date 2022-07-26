@@ -1,7 +1,7 @@
 import { renderBigImage } from './image-popup-window.js';
-// import { debounce } from './util.js';
+import { debounce } from './util.js';
 
-// const RERENDER_DELAY = 500;
+const RERENDER_DELAY = 500;
 const NUMBER_RANDOM_PICTURES = 10;
 
 const picturesList = document.querySelector('.pictures');
@@ -11,21 +11,30 @@ const filterButtons = document.querySelectorAll('.img-filters__button');
 
 const similarListFragment = document.createDocumentFragment();
 
-const compareLengthComments = (arr) => {
+const getLengthComments = (arr) => {
   const commentsArray = arr.comments;
   const commentsLength = commentsArray.length;
   return commentsLength;
 };
 
-const sortingPicture = (first, next) => {
-  const rankA = compareLengthComments(first);
-  const rankB = compareLengthComments(next);
+const sortDescendingOrder = (first, next) => {
+  const rankA = getLengthComments(first);
+  const rankB = getLengthComments(next);
 
   return rankB - rankA;
 };
 
+const getImageId = (arr) => arr.id;
+
+const sortAscendingOrder = (first, next) => {
+  const rankA = getImageId(first);
+  const rankB = getImageId(next);
+
+  return rankA - rankB;
+};
+
 const filterSettings = {
-  default: (array) => array,
+  default: (array) => array.sort(sortAscendingOrder),
   random:  (array) => {
     let currentIndex = array.length,  randomIndex;
     while (currentIndex !== 0) {
@@ -36,7 +45,7 @@ const filterSettings = {
     }
     return array.slice(array, NUMBER_RANDOM_PICTURES);
   },
-  popular: (array) => array.sort(sortingPicture),
+  popular: (array) => array.sort(sortDescendingOrder),
 };
 
 const openFilter = () => {
@@ -67,7 +76,7 @@ const renderPhotos = (picture) => {
 
 const selectFilter = (images) => {
   filterButtons.forEach((button) => {
-    button.addEventListener('click', (evt) => {
+    button.addEventListener('click', debounce((evt) => {
       makeButtonsInactive();
       const filterButton = evt.target;
       filterButton.classList.add('img-filters__button--active');
@@ -75,9 +84,8 @@ const selectFilter = (images) => {
       const getPictures = filterSettings[viewType];
       const pictures = getPictures(images);
       renderPhotos(pictures);
-      // debounce(() => renderPhotos(pictures), RERENDER_DELAY);
-    });
-  });
-};
+    }, RERENDER_DELAY));
+  });};
 
 export { renderPhotos, openFilter, selectFilter };
+
