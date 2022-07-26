@@ -1,4 +1,4 @@
-import { renderPhotos } from './rendering-thumbnails.js';
+import { renderPhotos, selectFilter } from './rendering-thumbnails.js';
 import { initForm } from './photo-upload-form.js';
 import { showAlert } from './util.js';
 import { getData } from './api.js';
@@ -16,4 +16,9 @@ const form = document.querySelector('.img-upload__form');
 const pristine = new Pristine (form, CLASS_OBJECT, false);
 
 initForm(pristine);
-getData(renderPhotos, showAlert, 'Фото не загружены. Проверьте соединение.');
+getData((pictures) => {
+  renderPhotos(pictures);
+  selectFilter(pictures);
+},
+showAlert,
+'Фото не загружены. Проверьте соединение.');
