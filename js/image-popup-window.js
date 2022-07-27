@@ -1,9 +1,3 @@
-import { getRandomInt } from './util.js';
-
-const MIN_NUMBER_COMMENTS = 3;
-const MAX_NUMBER_COMMENTS = 14;
-const NUMBERS_OF_COMMENTS = getRandomInt(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENTS);
-const NUMBERS_OF_READY_COMMENTS = 2;
 const WIDTH_AVATAR = 35;
 const HEIGHT_AVATAR = 35;
 
@@ -65,7 +59,7 @@ const renderBigImage = ({url, likes, comments, description}) => {
   popupImage.classList.remove('hidden');
   image.setAttribute('src', url);
   popupImage.querySelector('.likes-count').textContent = likes;
-  popupImage.querySelector('.comments-count').textContent = NUMBERS_OF_COMMENTS + NUMBERS_OF_READY_COMMENTS;
+  popupImage.querySelector('.comments-count').textContent = comments.length;
   popupImage.querySelector('.social__caption').textContent = description;
   commentsCount.textContent = comments.length;
   commentList.innerHTML = '';

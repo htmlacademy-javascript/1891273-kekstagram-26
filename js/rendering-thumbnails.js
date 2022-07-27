@@ -12,8 +12,8 @@ const filterButtons = document.querySelectorAll('.img-filters__button');
 const similarListFragment = document.createDocumentFragment();
 
 const getLengthComments = (arr) => {
-  const commentsArray = arr.comments;
-  const commentsLength = commentsArray.length;
+  const comments = arr.comments;
+  const commentsLength = comments.length;
   return commentsLength;
 };
 

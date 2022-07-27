@@ -1,22 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
 
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  if (min > max) {
-    const substitution = min;
-    min = max;
-    max = substitution;
-  }
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-const getRandomArrayElement = (elements) => {
-  const index = getRandomInt(0, elements.length - 1);
-
-  return elements[index];
-};
-
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
@@ -46,4 +29,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export { getRandomInt, getRandomArrayElement, showAlert, debounce };
+export { showAlert, debounce };
