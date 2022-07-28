@@ -154,10 +154,7 @@ const isArrayInique = (arrayToCheck) => {
   return true;
 };
 
-const validateCommentLength = (value) => {
-  const condition =  value.length <= MAX_LENGTH_COMMENT || value.length > 0;
-  return condition;
-};
+const validateCommentLength = (value) => value.length <= MAX_LENGTH_COMMENT || value.length > 0;
 
 const checkNumberHashtags = (hashtags) => preparedHashtags(hashtags).length <= MAX_NUMBER_HASHTAGS;
 

@@ -1,5 +1,6 @@
 const WIDTH_AVATAR = 35;
 const HEIGHT_AVATAR = 35;
+const escButtonNumber = 27;
 
 const COMMENTS_STEP = 5;
 
@@ -44,9 +45,9 @@ const createComments = (start, end, comments) => {
 const renderComments = (start, end, comments) => {
   const fragment =  createComments(start, end, comments);
   commentList.append(fragment);
-  const numberVisibleСomments = document.querySelectorAll('.social__comment');
-  commentsNumber.textContent = numberVisibleСomments.length;
-  if (end > numberVisibleСomments.length && end !== COMMENTS_STEP) {
+  const numberVisibleComments = document.querySelectorAll('.social__comment');
+  commentsNumber.textContent = numberVisibleComments.length;
+  if (commentsCount.textContent === commentsNumberText.textContent) {
     commentsUploadButton.style.visibility = 'hidden';
   } else {
     commentsUploadButton.style.visibility = '';
@@ -80,7 +81,7 @@ closePopupButton.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.keyCode === 27) {
+  if (e.keyCode === escButtonNumber) {
     popupImage.classList.add('hidden');
     body.classList.remove('modal-open');
   }
