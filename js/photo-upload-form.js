@@ -1,11 +1,7 @@
 import { sendData } from './api.js';
+import { mistakes, validateCommentLength } from './validation.js';
+import { zoomIn, zoomOut } from './zoom.js';
 
-const MAX_NUMBER_HASHTAGS = 5;
-const MAX_LENGTH_COMMENT = 140;
-const MAX_LENGTH_HASHTAG = 20;
-const SCALING_STEP = 25;
-const MIN_SCALE = 25;
-const MAX_SCALE = 100;
 const initialEffectLevel = 100;
 const escButtonNumber = 27;
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
@@ -17,62 +13,16 @@ const commentInput = document.querySelector('.text__description');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const form = document.querySelector('.img-upload__form');
 const body = document.querySelector('body');
-const zoomControl = document.querySelector('.scale__control--value');
-const zoomOutButton = document.querySelector('.scale__control--smaller');
-const zoomInButton = document.querySelector('.scale__control--bigger');
 const uploadedImageBlock = document.querySelector('.img-upload__preview');
 const uploadedImage = uploadedImageBlock.querySelector('img');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectsForm = document.querySelector('.effects');
 const slider = document.querySelector('.effect-level__slider');
 const submitButton = document.querySelector('.img-upload__submit');
-
-noUiSlider.create(slider, {
-  start: [100],
-  connect: 'lower',
-  range: {
-    'min': 0,
-    'max': 100
-  }
-});
-
-const changeImageSize = () => {
-  if (zoomControl.value === '25%') {
-    uploadedImage.style = 'transform: scale(0.25)';
-  }
-  if (zoomControl.value === '50%') {
-    uploadedImage.style = 'transform: scale(0.5)';
-  }
-  if (zoomControl.value === '75%') {
-    uploadedImage.style = 'transform: scale(0.75)';
-  }
-  if (zoomControl.value === '100%') {
-    uploadedImage.style = 'transform: scale(1)';
-  }
-};
-
-const zoomOut = () => {
-  let zoomControlValue = Math.floor(zoomControl.value.replace('%', ''));
-  if (zoomControlValue > MIN_SCALE) {
-    zoomControlValue = zoomControlValue - SCALING_STEP;
-  } else {
-    zoomControlValue = MIN_SCALE;
-  }
-  zoomControl.value = `${ zoomControlValue }%`;
-  changeImageSize();
-};
-
-
-const zoomIn = () => {
-  let zoomControlValue = Math.floor(zoomControl.value.replace('%', ''));
-  if (zoomControlValue < MAX_SCALE - SCALING_STEP) {
-    zoomControlValue = zoomControlValue + SCALING_STEP;
-  } else {
-    zoomControlValue = MAX_SCALE;
-  }
-  zoomControl.value = `${ zoomControlValue }%`;
-  changeImageSize();
-};
+const effectNoneElement = document.querySelector('#effect-none');
+const zoomOutButton = document.querySelector('.scale__control--smaller');
+const zoomInButton = document.querySelector('.scale__control--bigger');
+const zoomControl = document.querySelector('.scale__control--value');
 
 const applyEffect = (effect, effectClass) => {
   slider.noUiSlider.set(initialEffectLevel);
@@ -139,49 +89,15 @@ const selectEffect = (e) => {
     uploadedImage.classList.remove('effects__preview--heat');}
 };
 
-const preparedHashtags = (value) => value.trim().toLowerCase().split(' ');
-
-const isArrayInique = (arrayToCheck) => {
-  const length = arrayToCheck.length;
-  for (let i = 0; i < length; i++) {
-    const comparedElement = arrayToCheck[i];
-    for (let j = i + 1; j < length; j++) {
-      const elementToCompare = arrayToCheck[j];
-      if (comparedElement === elementToCompare && comparedElement !== '#') {
-        return false;
-      }
-    }
-  }
-  return true;
-};
-
-const validateCommentLength = (value) => value.length <= MAX_LENGTH_COMMENT || value.length > 0;
-
-const checkNumberHashtags = (hashtags) => preparedHashtags(hashtags).length <= MAX_NUMBER_HASHTAGS;
-
-const checkPunctuationMarks = (hashtags) => hashtags === '' || preparedHashtags(hashtags).every((value) => /[^-_=+;:,.]$/m.test(value));
-
-const verifyIdentity = (hashtags) => isArrayInique(preparedHashtags(hashtags));
-
-const checkCharacters = (hashtags) => hashtags === '' || preparedHashtags(hashtags).every((value) => /^#[a-zA-Zа-яА-ЯёЁ0-9]{0,}$/.test(value));
-
-const checkHashtagLength = (hashtags) => hashtags === '' || preparedHashtags(hashtags).every((value) => value.length >= 2 && value.length <= MAX_LENGTH_HASHTAG);
-
-const uploadPicture = () => {
-  const file = imageUploadForm.files[0];
-  const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
-  if (matches) {
-    uploadedImage.src = URL.createObjectURL(file);
-  }
-};
-
-const closeDownloadWindow = () => {
+const closeWindow = () => {
   imageUploadForm.value = '';
   hashtagsInput.value = '';
   commentInput.value = '';
-  uploadedImage.style.filter = 'none';
   slider.noUiSlider.set(initialEffectLevel);
+  effectNoneElement.checked = true;
+  zoomControl.value = '50%';
+  uploadedImage.style = 'transform: scale(1)';
+  uploadedImage.style.filter = 'none';
   zoomOutButton.removeEventListener('click', zoomOut);
   zoomInButton.removeEventListener('click', zoomIn);
   effectsForm.removeEventListener('change', selectEffect);
@@ -202,6 +118,7 @@ const openDownloadWindow = () => {
   imageEditingForm.classList.remove('hidden');
   body.classList.add('modal-open');
   uploadPicture();
+  slider.classList.add('hidden');
   const file = imageUploadForm.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
@@ -214,30 +131,6 @@ const openDownloadWindow = () => {
   cancelButton.addEventListener('click', closeDownloadWindow);
   document.addEventListener('keydown', closeEscDownloadWindow, {once: true});
 };
-
-const mistakes = [
-  {
-    check: checkNumberHashtags,
-    comment: 'Максимальное колличество хэштегов 5',
-  },
-  {
-    check: checkPunctuationMarks,
-    comment: 'Хэштеги должны разделяться пробелом',
-  },
-  {
-    check: verifyIdentity,
-    comment: 'Хэштеги не должны повторяться',
-  },
-  {
-    check: checkCharacters,
-    comment: 'Хэштег начинается с # и состоит только из букв и цифр',
-  },
-  {
-    check: checkHashtagLength,
-    comment: 'Максимальная длина хэштега 20 символов',
-  }
-];
-
 
 const blockMessage = document.createElement('div');
 const messageTemplate = document.querySelector('#success').content.querySelector('.success');

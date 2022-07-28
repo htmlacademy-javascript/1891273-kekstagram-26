@@ -3,6 +3,7 @@ import { initForm } from './photo-upload-form.js';
 import { showAlert } from './util.js';
 import { getData } from './api.js';
 
+const slider = document.querySelector('.effect-level__slider');
 const CLASS_OBJECT = {
   classTo: 'img-upload__field-wrapper',
   errorClass: 'form-item__invalid',
@@ -14,6 +15,15 @@ const CLASS_OBJECT = {
 const form = document.querySelector('.img-upload__form');
 
 const pristine = new Pristine (form, CLASS_OBJECT, false);
+
+noUiSlider.create(slider, {
+  start: [100],
+  connect: 'lower',
+  range: {
+    'min': 0,
+    'max': 100
+  }
+});
 
 initForm(pristine);
 getData((pictures) => {
