@@ -7,6 +7,7 @@ const SCALING_STEP = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const initialEffectLevel = 100;
+const escButtonNumber = 27;
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const imageUploadForm = document.querySelector('#upload-file');
@@ -201,6 +202,12 @@ const openDownloadWindow = () => {
   imageEditingForm.classList.remove('hidden');
   body.classList.add('modal-open');
   uploadPicture();
+  const file = imageUploadForm.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+  if (matches) {
+    uploadedImage.src = URL.createObjectURL(file);
+  }
   zoomOutButton.addEventListener('click', zoomOut);
   zoomInButton.addEventListener('click', zoomIn);
   effectsForm.addEventListener('change', selectEffect);
@@ -250,6 +257,12 @@ const closeSendingMessage = () => {
 const closeEscSendingMessage = (e) => {
   const curElement = document.activeElement;
   if (e.keyCode === 27 && curElement !== hashtagsInput && curElement !== commentInput) {
+    closeSendingMessage();
+  }
+};
+
+const checkButton = (e) => {
+  if (e.keyCode === escButtonNumber) {
     closeSendingMessage();
   }
 };
