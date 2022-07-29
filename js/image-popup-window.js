@@ -4,16 +4,16 @@ const escButtonNumber = 27;
 
 const COMMENTS_STEP = 5;
 
-const popupImage = document.querySelector('.big-picture');
-const imageBlock = popupImage.querySelector('.big-picture__img');
-const image = imageBlock.querySelector('img');
-const commentList = popupImage.querySelector('.social__comments');
-const commentsCount = popupImage.querySelector('.comments-count');
-const closePopupButton = document.querySelector('.big-picture__cancel');
-const body = document.querySelector('body');
-const commentsUploadButton = document.querySelector('.social__comments-loader');
-const commentsNumberText = document.querySelector('.comments-number');
-const commentsNumber = popupImage.querySelector('.comments-number');
+const popupImageElement = document.querySelector('.big-picture');
+const imageBlockElement = popupImageElement.querySelector('.big-picture__img');
+const imageElement = imageBlockElement.querySelector('img');
+const commentListElement = popupImageElement.querySelector('.social__comments');
+const commentsCountElement = popupImageElement.querySelector('.comments-count');
+const closePopupButtonElement = document.querySelector('.big-picture__cancel');
+const bodyElement = document.querySelector('body');
+const commentsUploadButtonElement = document.querySelector('.social__comments-loader');
+const commentsNumberTextElement = document.querySelector('.comments-number');
+const commentsNumberElement = popupImageElement.querySelector('.comments-number');
 
 const getCommentsData = (comment) => {
   const commentItem = document.createElement('li');
@@ -44,46 +44,46 @@ const createComments = (start, end, comments) => {
 
 const renderComments = (start, end, comments) => {
   const fragment =  createComments(start, end, comments);
-  commentList.append(fragment);
-  const numberVisibleComments = document.querySelectorAll('.social__comment');
-  commentsNumber.textContent = numberVisibleComments.length;
-  if (commentsCount.textContent === commentsNumberText.textContent) {
-    commentsUploadButton.style.visibility = 'hidden';
+  commentListElement.append(fragment);
+  const numberVisibleCommentsElements = document.querySelectorAll('.social__comment');
+  commentsNumberElement.textContent = numberVisibleCommentsElements.length;
+  if (commentsCountElement.textContent === commentsNumberTextElement.textContent) {
+    commentsUploadButtonElement.style.visibility = 'hidden';
   } else {
-    commentsUploadButton.style.visibility = '';
+    commentsUploadButtonElement.style.visibility = '';
   }
 };
 
 const renderBigImage = ({url, likes, comments, description}) => {
   let commentsLimit = 5;
   let commentStart = 0;
-  popupImage.classList.remove('hidden');
-  image.setAttribute('src', url);
-  popupImage.querySelector('.likes-count').textContent = likes;
-  popupImage.querySelector('.comments-count').textContent = comments.length;
-  popupImage.querySelector('.social__caption').textContent = description;
-  commentsCount.textContent = comments.length;
-  commentList.innerHTML = '';
+  popupImageElement.classList.remove('hidden');
+  imageElement.setAttribute('src', url);
+  popupImageElement.querySelector('.likes-count').textContent = likes;
+  popupImageElement.querySelector('.comments-count').textContent = comments.length;
+  popupImageElement.querySelector('.social__caption').textContent = description;
+  commentsCountElement.textContent = comments.length;
+  commentListElement.innerHTML = '';
   renderComments(commentStart, commentsLimit, comments);
 
-  commentsUploadButton.addEventListener('click', () => {
+  commentsUploadButtonElement.addEventListener('click', () => {
     commentStart += COMMENTS_STEP;
     commentsLimit += COMMENTS_STEP;
     renderComments(commentStart, commentsLimit, comments);
-    const numberComment = document.querySelectorAll('.social__comment');
-    commentsNumberText.textContent = numberComment.length;
+    const numberCommentElements = document.querySelectorAll('.social__comment');
+    commentsNumberTextElement.textContent = numberCommentElements.length;
   });
 };
 
-closePopupButton.addEventListener('click', () => {
-  popupImage.classList.add('hidden');
-  body.classList.remove('modal-open');
+closePopupButtonElement.addEventListener('click', () => {
+  popupImageElement.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
 });
 
 document.addEventListener('keydown', (e) => {
   if (e.keyCode === escButtonNumber) {
-    popupImage.classList.add('hidden');
-    body.classList.remove('modal-open');
+    popupImageElement.classList.add('hidden');
+    bodyElement.classList.remove('modal-open');
   }
 });
 

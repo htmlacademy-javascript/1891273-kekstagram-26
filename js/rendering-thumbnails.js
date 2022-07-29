@@ -4,10 +4,10 @@ import { debounce } from './util.js';
 const RERENDER_DELAY = 500;
 const NUMBER_RANDOM_PICTURES = 10;
 
-const picturesList = document.querySelector('.pictures');
-const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const imageFilters = document.querySelector('.img-filters');
-const filterButtons = document.querySelectorAll('.img-filters__button');
+const picturesListElement = document.querySelector('.pictures');
+const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
+const imageFiltersElement = document.querySelector('.img-filters');
+const filterButtonsElements = document.querySelectorAll('.img-filters__button');
 
 const similarListFragment = document.createDocumentFragment();
 
@@ -49,33 +49,33 @@ const filterSettings = {
 };
 
 const openFilter = () => {
-  imageFilters.classList.remove('img-filters--inactive');
+  imageFiltersElement.classList.remove('img-filters--inactive');
 };
 
 const makeButtonsInactive = () => {
-  filterButtons.forEach((button) => {
+  filterButtonsElements.forEach((button) => {
     button.classList.remove('img-filters__button--active');
   });
 };
 
 const renderPhotos = (picture) => {
-  const pictureShown = picturesList.querySelectorAll('.picture');
-  pictureShown.forEach((photo) => photo.remove());
+  const pictureShownElements = picturesListElement.querySelectorAll('.picture');
+  pictureShownElements.forEach((photo) => photo.remove());
   picture.forEach(({url, likes, comments, description}) => {
-    const pictureElement = pictureTemplate.cloneNode(true);
+    const pictureElement = pictureTemplateElement.cloneNode(true);
     pictureElement.querySelector('.picture__comments').textContent = comments.length;
     pictureElement.querySelector('.picture__likes').textContent = likes;
-    const imageAddress = pictureElement.querySelector('.picture__img');
-    imageAddress.setAttribute('src', url);
+    const imageAddressElement = pictureElement.querySelector('.picture__img');
+    imageAddressElement.setAttribute('src', url);
     similarListFragment.appendChild(pictureElement);
     pictureElement.addEventListener('click', () => renderBigImage({url, likes, comments, description}));
   });
-  picturesList.appendChild(similarListFragment);
+  picturesListElement.appendChild(similarListFragment);
   openFilter();
 };
 
 const selectFilter = (images) => {
-  filterButtons.forEach((button) => {
+  filterButtonsElements.forEach((button) => {
     button.addEventListener('click', debounce((evt) => {
       makeButtonsInactive();
       const filterButton = evt.target;
