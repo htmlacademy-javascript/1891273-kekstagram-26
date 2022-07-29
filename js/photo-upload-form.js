@@ -94,8 +94,6 @@ const closeWindow = () => {
   hashtagsInput.value = '';
   commentInput.value = '';
   slider.noUiSlider.set(initialEffectLevel);
-  effectNoneElement.checked = true;
-  zoomControl.value = '50%';
   uploadedImage.style = 'transform: scale(1)';
   uploadedImage.style.filter = 'none';
   zoomOutButton.removeEventListener('click', zoomOut);
@@ -119,6 +117,8 @@ const openDownloadWindow = () => {
   body.classList.add('modal-open');
   uploadPicture();
   slider.classList.add('hidden');
+  effectNoneElement.checked = true;
+  zoomControl.value = '100%';
   const file = imageUploadForm.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
