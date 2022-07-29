@@ -89,7 +89,7 @@ const selectEffect = (e) => {
     uploadedImage.classList.remove('effects__preview--heat');}
 };
 
-const closeWindow = () => {
+const closeDownloadWindow = () => {
   imageUploadForm.value = '';
   hashtagsInput.value = '';
   commentInput.value = '';
@@ -105,7 +105,7 @@ const closeWindow = () => {
 
 const closeEscDownloadWindow = (e) => {
   const curElement = document.activeElement;
-  if (e.keyCode === 27 && curElement !== hashtagsInput && curElement !== commentInput) {
+  if (e.keyCode === escButtonNumber && curElement !== hashtagsInput && curElement !== commentInput) {
     closeDownloadWindow();
   } else {
     document.addEventListener('keydown', closeEscDownloadWindow, {once: true});
@@ -115,7 +115,6 @@ const closeEscDownloadWindow = (e) => {
 const openDownloadWindow = () => {
   imageEditingForm.classList.remove('hidden');
   body.classList.add('modal-open');
-  uploadPicture();
   slider.classList.add('hidden');
   effectNoneElement.checked = true;
   zoomControl.value = '100%';
@@ -149,16 +148,16 @@ const closeSendingMessage = () => {
 
 const closeEscSendingMessage = (e) => {
   const curElement = document.activeElement;
-  if (e.keyCode === 27 && curElement !== hashtagsInput && curElement !== commentInput) {
+  if (e.keyCode === escButtonNumber && curElement !== hashtagsInput && curElement !== commentInput) {
     closeSendingMessage();
   }
 };
 
-const checkButton = (e) => {
-  if (e.keyCode === escButtonNumber) {
-    closeSendingMessage();
-  }
-};
+// const checkButton = (e) => {
+//   if (e.keyCode === escButtonNumber) {
+//     closeSendingMessage();
+//   }
+// };
 
 const checkClickArea = (e) => {
   const block = document.querySelector('.success__inner');
